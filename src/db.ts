@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
@@ -6,11 +6,21 @@ const url = 'mongodb://localhost:27017';
 // Database Name
 const dbName = 'bookstore';
 
-export const connectToDb = () => {
-  MongoClient.connect(`${url}/${dbName}`);
+let dbConnection: Db;
+
+export const connectToDb = (next: (arg?: any) => any) => {
+  MongoClient.connect(`${url}/${dbName}`)
+    .then((client) => {
+      dbConnection = client.db();
+      return next();
+    })
+    .catch((err) => {
+      console.log(err);
+      return next(err);
+    });
 };
 
-export const getDb = () => {};
+export const getDb = () => dbConnection;
 
 // // Connection URL
 // const client = new MongoClient(url);
