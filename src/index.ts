@@ -6,9 +6,13 @@ import { IBook, IBooks } from './types';
 const app = express();
 const PORT = process.env.PORT || 3500;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // db connection
 let db: Db;
 let booksCollection: Collection<IBook>;
+const booksApi = '/api/books';
 
 connectToDb((err) => {
   if (!err) {
@@ -20,7 +24,7 @@ connectToDb((err) => {
   }
 });
 
-app.get('/books', (req, res) => {
+app.get(`${booksApi}`, (req, res) => {
   let books: IBooks = [];
 
   booksCollection
@@ -32,11 +36,11 @@ app.get('/books', (req, res) => {
       res.status(200).json(books);
     })
     .catch((err) => {
-      res.status(500).json({ error: 'could not fetch the documents' });
+      res.status(500).json({ error: 'could not fetch this books' });
     });
 });
 
-app.get('/books/:id', (req, res) => {
+app.get(`${booksApi}/:id`, (req, res) => {
   const { id } = req.params;
 
   // NOTE:  find a way to check if the id is a valid BSON ObjectId
@@ -48,9 +52,62 @@ app.get('/books/:id', (req, res) => {
         res.status(200).json(book);
       })
       .catch((err) => {
-        res.status(500).json({ error: 'could not fetch the document' });
+        res.status(500).json({ error: 'could not fetch this book' });
       });
   } else {
-    res.status(500).json({ error: 'the document id is not a valid id' });
+    res.status(500).json({ error: "this book's id is not a valid id" });
+  }
+});
+
+app.post(`${booksApi}`, (req, res) => {
+  const book = req.body as IBook;
+
+  booksCollection
+    .insertOne(book)
+    .then((response) => {
+      res.status(201).json(response);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: 'could not create a new book' });
+    });
+});
+
+app.patch(`${booksApi}/:id`, (req, res) => {
+  const { id } = req.params;
+  const updates = req.body as Partial<IBook>;
+
+  // NOTE:  find a way to check if the id is a valid BSON ObjectId
+  // but is not present in the database
+  if (ObjectId.isValid(id)) {
+    booksCollection
+      // .updateOne({ _id: new ObjectId(id) }, {$set:{ ...updates}})
+      .updateOne({ _id: new ObjectId(id) }, { $set: updates })
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: 'could not update this book' });
+      });
+  } else {
+    res.status(500).json({ error: "this book's id is not a valid id" });
+  }
+});
+
+app.delete(`${booksApi}/:id`, (req, res) => {
+  const { id } = req.params;
+
+  // NOTE:  find a way to check if the id is a valid BSON ObjectId
+  // but is not present in the database
+  if (ObjectId.isValid(id)) {
+    booksCollection
+      .deleteOne({ _id: new ObjectId(id) })
+      .then((response) => {
+        res.status(200).json(response);
+      })
+      .catch((err) => {
+        res.status(500).json({ error: 'could not delete this book' });
+      });
+  } else {
+    res.status(500).json({ error: "this book's id is not a valid id" });
   }
 });
