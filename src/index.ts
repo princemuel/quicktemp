@@ -25,11 +25,16 @@ connectToDb((err) => {
 });
 
 app.get(`${booksApi}`, (req, res) => {
+  const page = req.query?.page || 0;
+  const booksPerPage = req.query?.limit || 3;
+
   let books: IBooks = [];
 
   booksCollection
     .find()
     .sort({ author: 1 })
+    .skip(+page * +booksPerPage)
+    .limit(+booksPerPage)
     // @ts-expect-error
     .forEach((book) => books.push(book))
     .then(() => {
