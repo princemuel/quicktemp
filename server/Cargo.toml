@@ -7,3 +7,5 @@
 
 [dependencies]
   actix-web = "4"
+  actix-cors = "0.7.0"
+  serde = { version = "1", features = ["derive"] }
