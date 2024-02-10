@@ -1,9 +1,8 @@
 use actix_cors::Cors;
 use actix_web::{http, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::Deserialize;
-use std::env;
 
-// const MAX_CACHE_RESOURCE_TIME: usize = 60 * 60 * 1;
+const MAX_CACHE_RESOURCE_TIME: usize = 60 * 60 * 2;
 
 #[derive(Deserialize)]
 struct FormData {
@@ -28,7 +27,9 @@ async fn main() -> std::io::Result<()> {
         //     .allowed_header(http::header::CONTENT_TYPE)
         //     .max_age(MAX_CACHE_RESOURCE_TIME);
 
-        let cors = Cors::permissive();
+        let cors = Cors::permissive()
+            .allowed_methods(vec!["POST"])
+            .max_age(MAX_CACHE_RESOURCE_TIME);
 
         App::new().wrap(cors).service(convert)
     })
@@ -100,7 +101,7 @@ fn truncate_decimal_places(value: f64, places: usize) -> f64 {
 }
 
 fn get_env_value(prod_value: &str, dev_value: &str) -> String {
-    match env::var("DEBUG") {
+    match std::env::var("DEBUG") {
         Ok(value) if value == "true" => dev_value.to_string(),
         _ => prod_value.to_string(),
     }
