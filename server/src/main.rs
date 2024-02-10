@@ -2,7 +2,7 @@ use actix_cors::Cors;
 use actix_web::{http, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::Deserialize;
 
-const ORIGIN_URL: &str = "http://127.0.0.1:3000";
+const ORIGIN_URL: &str = "https://quicktemp.vercel.app";
 const MAX_CACHE_RESOURCE_TIME: usize = 60 * 60 * 1;
 
 #[derive(Deserialize)]
@@ -17,7 +17,9 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::default()
             .allowed_origin(ORIGIN_URL)
-            .allowed_origin_fn(|origin, _req_head| origin.as_bytes().ends_with(b":3000"))
+            .allowed_origin_fn(|origin, _req_head| {
+                origin.as_bytes().ends_with(b":quicktemp.vercel.app")
+            })
             .allowed_methods(vec!["POST"])
             .allowed_headers(vec![http::header::ACCEPT])
             .allowed_header(http::header::CONTENT_TYPE)
