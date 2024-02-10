@@ -13,7 +13,11 @@
       <main
         class="max-w-md w-full mx-auto px-4 py-8 md:px-6 bg-slate-800 rounded-lg"
       >
-        <form action="" class="flex flex-col gap-6">
+        <form
+          hx-post="http://127.0.0.1:8080/api/v1/convert"
+          hx-target="#result"
+          class="flex flex-col gap-6"
+        >
           <h1 class="text-2xl lg:text-3xl font-bold text-white">
             Temperature Converter 🌡️
           </h1>
@@ -23,29 +27,29 @@
           >
             <legend class="sr-only">Use the Select Menus to</legend>
 
-            <label for="from" class="text-lg cursor-pointer">From</label>
+            <label for="from_scale" class="text-lg cursor-pointer">From</label>
             <select
-              name="from"
-              id="from"
+              name="from_scale"
+              id="from_scale"
               class="px-3 py-2 rounded-md text-gray-900 w-full"
               autocomplete="off"
               required
             >
               <option value="celsius" selected>Celsius</option>
-              <option value="farenheit">Farenheit</option>
+              <option value="fahrenheit">Fahrenheit</option>
               <option value="kelvin">Kelvin</option>
             </select>
 
-            <label for="to" class="text-lg cursor-pointer">To</label>
+            <label for="to_scale" class="text-lg cursor-pointer">To</label>
             <select
-              name="to"
-              id="to"
+              name="to_scale"
+              id="to_scale"
               class="px-3 py-2 rounded-md text-gray-900 w-full"
               autocomplete="off"
               required
             >
               <option value="celsius">Celsius</option>
-              <option value="farenheit">Farenheit</option>
+              <option value="fahrenheit">Fahrenheit</option>
               <option value="kelvin" selected>Kelvin</option>
             </select>
 
@@ -54,9 +58,9 @@
             </label>
             <input
               type="number"
-              id="temp"
-              name="temp"
-              placeholder="Enter The Temperature"
+              id="temperature"
+              name="temperature"
+              placeholder="Enter the temperature..."
               class="px-2.5 py-2 rounded-md text-gray-900 w-full"
               step="0.01"
               required
@@ -70,11 +74,12 @@
                 name="result"
                 id="result"
                 for="from to temp"
-                class="text-white underline decoration-blue-500 decoration-wavy decoration-1"
+                class="text-white"
                 >ddd
               </output>
             </div>
           </fieldset>
+          <!-- class="text-white underline decoration-blue-500 decoration-wavy decoration-1" -->
 
           <button
             type="submit"
@@ -83,8 +88,6 @@
             Submit
           </button>
         </form>
-
-        <div class=""></div>
       </main>
     </div>
   </body>
