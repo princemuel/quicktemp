@@ -1,8 +1,8 @@
 use actix_cors::Cors;
 use actix_web::{http, post, web, App, HttpResponse, HttpServer, Responder};
 use serde::Deserialize;
+use std::env;
 
-const ORIGIN_URL: &str = "https://quicktemp.vercel.app";
 const MAX_CACHE_RESOURCE_TIME: usize = 60 * 60 * 1;
 
 #[derive(Deserialize)]
@@ -16,7 +16,10 @@ struct FormData {
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::default()
-            .allowed_origin(ORIGIN_URL)
+            .allowed_origin(&get_env_value(
+                "https://quicktemp.vercel.app",
+                "http://127.0.0.1:3000",
+            ))
             .allowed_origin_fn(|origin, _req_head| {
                 origin.as_bytes().ends_with(b":quicktemp.vercel.app")
             })
@@ -27,7 +30,7 @@ async fn main() -> std::io::Result<()> {
 
         App::new().wrap(cors).service(convert)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind((get_env_value("0.0.0.0", "127.0.0.1"), 8080))?
     .run()
     .await
 }
@@ -92,4 +95,11 @@ fn capitalize_first_letter(input: &str) -> String {
 fn truncate_decimal_places(value: f64, places: usize) -> f64 {
     let multiplier = 10u64.pow(places as u32) as f64;
     (value * multiplier).round() / multiplier
+}
+
+fn get_env_value(prod_value: &str, dev_value: &str) -> String {
+    match env::var("DEBUG") {
+        Ok(value) if value == "true" => dev_value.to_string(),
+        _ => prod_value.to_string(),
+    }
 }
