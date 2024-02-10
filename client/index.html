@@ -14,7 +14,7 @@
         class="max-w-md w-full mx-auto px-4 py-8 md:px-6 bg-slate-800 rounded-lg"
       >
         <form
-          hx-post="http://127.0.0.1:8080/api/v1/convert"
+          hx-post="https://quicktemp.onrender.com/api/v1/convert"
           hx-target="#result"
           class="flex flex-col gap-6"
         >
@@ -75,17 +75,16 @@
                 id="result"
                 for="from to temp"
                 class="text-white"
-                >ddd
+              >
               </output>
             </div>
           </fieldset>
-          <!-- class="text-white underline decoration-blue-500 decoration-wavy decoration-1" -->
 
           <button
             type="submit"
             class="inline-flex mx-auto rounded-full bg-slate-900 px-5 py-2 items-center text-white cursor-pointer"
           >
-            Submit
+            Convert
           </button>
         </form>
       </main>
