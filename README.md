@@ -1,3 +1,3 @@
 # Quick Temp 🌡️
 
-Who Needs a Thermometer 🌡️? We're Here to **Spice Up** Your Temperature Tales – _Because Being Hot or Cold Should Come with a Chuckle!_
+The ultimate tool for effortless temperature conversions with a user-friendly interface, ensuring precision and convenience for all your temperature-related needs. You can seamlessly switch between Celsius, Fahrenheit, and Kelvin.
