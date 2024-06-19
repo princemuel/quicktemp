@@ -3,31 +3,28 @@ use actix_web::{http, post, web, HttpResponse, Responder};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-struct FormData {
+struct Temparature {
     from_scale: String,
     to_scale: String,
     temperature: f64,
 }
 
 #[post("/api/v1/convert")]
-pub async fn convert(form_data: web::Form<FormData>) -> impl Responder {
+pub async fn convert(form_data: web::Form<Temparature>) -> impl Responder {
     let temp = utils::convert_temp(
         form_data.temperature,
         &form_data.from_scale,
         &form_data.to_scale,
     );
 
-    let result: String;
-
-    if temp.is_nan() {
-        result = format!("Conversion Failed");
-    } else {
-        result = format!(
+    let result = match temp.is_nan() {
+        true => format!("Conversion Failed"),
+        false => format!(
             "{}° {}",
             utils::truncate_decimal_places(temp, 2),
             utils::capitalize_first_letter(&form_data.to_scale)
-        );
-    }
+        ),
+    };
 
     HttpResponse::Ok()
         .content_type(http::header::ContentType::plaintext())
