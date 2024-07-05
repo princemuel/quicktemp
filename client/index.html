@@ -5,7 +5,6 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Temperature Converter</title>
-    <script type="module" src="/src/main.ts"></script>
     <style>
       @font-face {
         src: url(/src/assets/NunitoSans.ttf) format("truetype");
@@ -19,6 +18,7 @@
         --font-sans: "__FontSans";
       }
     </style>
+    <script type="module" src="/src/main.ts"></script>
   </head>
 
   <body class="antialiased font-sans text-slate-200 font-medium bg-slate-900">
@@ -26,12 +26,7 @@
       <main
         class="max-w-md w-full mx-auto px-4 py-8 md:px-6 bg-slate-800 rounded-lg"
       >
-        <!-- hx-post="http://localhost:8080/api/v1/convert" -->
-        <form
-          hx-post="https://quicktemp.onrender.com/api/v1/convert"
-          hx-target="#result"
-          class="flex flex-col gap-6"
-        >
+        <form class="flex flex-col gap-6">
           <h1 class="text-2xl lg:text-3xl font-bold text-white">
             Quick Temp 🌡️
           </h1>
@@ -72,13 +67,11 @@
               <option value="kelvin" selected>Kelvin</option>
             </select>
 
-            <label for="temperature" class="text-lg cursor-pointer">
-              Degree
-            </label>
+            <label for="degree" class="text-lg cursor-pointer"> Degree </label>
             <input
               type="number"
-              id="temperature"
-              name="temperature"
+              id="degree"
+              name="degree"
               placeholder="Enter the temperature..."
               class="px-2.5 py-2 rounded-md text-gray-900 w-full"
               step="0.01"
