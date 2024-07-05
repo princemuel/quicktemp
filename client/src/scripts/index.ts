@@ -19,13 +19,17 @@ form.addEventListener("submit", function (e) {
     temperature.set_to(to_unit(formData.to_scale));
     temperature.set_value(parseFloat(formData.degree));
 
-    output.textContent = `${temperature.convert()}`;
+    output.textContent = `${temperature.convert()}°${to_string(
+      temperature.to()
+    )}`;
   } catch (error) {
     temperature.set_from(to_unit("Celsius"));
     temperature.set_to(to_unit("Fahrenheit"));
     temperature.set_value(parseFloat("100"));
 
-    output.textContent = `${temperature.convert()}`;
+    output.textContent = `${temperature.convert()}°${to_string(
+      temperature.to()
+    )}`;
   }
 });
 
@@ -37,6 +41,19 @@ function to_unit(value: string) {
       return Unit.Fahrenheit;
     case "kelvin":
       return Unit.Kelvin;
+    default:
+      throw new Error("Unknown unit");
+  }
+}
+
+function to_string(unit: Unit) {
+  switch (unit) {
+    case Unit.Celsius:
+      return "C";
+    case Unit.Fahrenheit:
+      return "F";
+    case Unit.Kelvin:
+      return "K";
     default:
       throw new Error("Unknown unit");
   }
