@@ -1,0 +1,26 @@
+{
+  "name": "quicktemp",
+  "collaborators": [
+    "Prince Muel <vansomecsam@gmail.com>"
+  ],
+  "description": "A temparature converter built with Vite, Wasm and Rust",
+  "version": "0.2.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/princemuel/quicktemp"
+  },
+  "files": [
+    "quicktemp_bg.wasm",
+    "quicktemp.js",
+    "quicktemp_bg.js",
+    "quicktemp.d.ts",
+    "LICENSE.txt"
+  ],
+  "module": "quicktemp.js",
+  "types": "quicktemp.d.ts",
+  "sideEffects": [
+    "./quicktemp.js",
+    "./snippets/*"
+  ]
+}
