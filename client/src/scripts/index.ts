@@ -15,20 +15,20 @@ form.addEventListener("submit", function (e) {
   const formData = Object.fromEntries(new FormData(form).entries()) as Values;
 
   try {
-    temperature.set_from(to_unit(formData.from_scale));
-    temperature.set_to(to_unit(formData.to_scale));
-    temperature.set_value(parseFloat(formData.degree));
+    temperature.set_from_unit(to_unit(formData.from_scale));
+    temperature.set_to_unit(to_unit(formData.to_scale));
+    temperature.set_degree(parseFloat(formData.degree));
 
     output.textContent = `${temperature.convert()}°${to_string(
-      temperature.to()
+      temperature.get_to_unit()
     )}`;
   } catch (error) {
-    temperature.set_from(to_unit("Celsius"));
-    temperature.set_to(to_unit("Fahrenheit"));
-    temperature.set_value(parseFloat("100"));
+    temperature.set_from_unit(to_unit("Celsius"));
+    temperature.set_to_unit(to_unit("Fahrenheit"));
+    temperature.set_degree(parseFloat("100"));
 
     output.textContent = `${temperature.convert()}°${to_string(
-      temperature.to()
+      temperature.get_to_unit()
     )}`;
   }
 });

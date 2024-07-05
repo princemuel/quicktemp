@@ -25,7 +25,7 @@ pub enum Unit {
 struct Temperature {
     from: Unit,
     to: Unit,
-    value: f64,
+    degree: f64,
 }
 impl Default for Temperature {
     fn default() -> Self {
@@ -50,7 +50,7 @@ impl fmt::Display for Temperature {
         write!(
             f,
             "Temperature: {:.2} {} -> {}",
-            self.value, unit_from_str, unit_to_str
+            self.degree, unit_from_str, unit_to_str
         )
     }
 }
@@ -61,58 +61,61 @@ impl Temperature {
         utils::set_panic_hook();
 
         let degree = 100.0;
-        let from_value = Unit::Celsius;
-        let to_value = Unit::Fahrenheit;
+        let from_degree = Unit::Celsius;
+        let to_degree = Unit::Fahrenheit;
 
-        Temperature { value: degree, from: from_value, to: to_value }
+        Temperature { degree, from: from_degree, to: to_degree }
     }
 
     pub fn convert(&self) -> f64 {
         log!(
-            "Converting temperature: value={}, from={:?}, to={:?}",
-            self.value,
+            "Converting temperature: degree={}, from={:?}, to={:?}",
+            self.degree,
             self.from,
             self.to
         );
 
-        match (self.from, self.to) {
-            (Unit::Celsius, Unit::Fahrenheit) => self.value * 9.0 / 5.0 + 32.0,
+        let converted = match (self.from, self.to) {
+            (Unit::Celsius, Unit::Fahrenheit) => self.degree * 9.0 / 5.0 + 32.0,
             (Unit::Fahrenheit, Unit::Celsius) => {
-                (self.value - 32.0) * 5.0 / 9.0
+                (self.degree - 32.0) * 5.0 / 9.0
             },
-            (Unit::Celsius, Unit::Kelvin) => self.value + 273.15,
-            (Unit::Kelvin, Unit::Celsius) => self.value - 273.15,
+            (Unit::Celsius, Unit::Kelvin) => self.degree + 273.15,
+            (Unit::Kelvin, Unit::Celsius) => self.degree - 273.15,
             (Unit::Fahrenheit, Unit::Kelvin) => {
-                (self.value - 32.0) * 5.0 / 9.0 + 273.15
+                (self.degree - 32.0) * 5.0 / 9.0 + 273.15
             },
             (Unit::Kelvin, Unit::Fahrenheit) => {
-                (self.value - 273.15) * 9.0 / 5.0 + 32.0
+                (self.degree - 273.15) * 9.0 / 5.0 + 32.0
             },
-            _ => self.value, // No conversion needed if units are the same
-        }
+            _ => self.degree, // No conversion needed if units are the same
+        };
+
+        let multiplier = 10_i8.pow(2) as f64;
+        (converted * multiplier).round() / multiplier
     }
 
-    pub fn value(&self) -> f64 {
-        self.value
+    pub fn get_degree(&self) -> f64 {
+        self.degree
     }
     /// Set the temparature's degree
-    pub fn set_value(&mut self, degree: f64) {
-        self.value = degree
+    pub fn set_degree(&mut self, degree: f64) {
+        self.degree = degree
     }
 
-    pub fn from(&self) -> Unit {
+    pub fn get_from_unit(&self) -> Unit {
         self.from
     }
     /// Set the temparature's from unit
-    pub fn set_from(&mut self, unit: Unit) {
+    pub fn set_from_unit(&mut self, unit: Unit) {
         self.from = unit
     }
 
-    pub fn to(&self) -> Unit {
+    pub fn get_to_unit(&self) -> Unit {
         self.to
     }
     /// Set the temparature's to unit
-    pub fn set_to(&mut self, unit: Unit) {
+    pub fn set_to_unit(&mut self, unit: Unit) {
         self.to = unit
     }
 }

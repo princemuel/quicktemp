@@ -13,14 +13,12 @@
   "files": [
     "quicktemp_bg.wasm",
     "quicktemp.js",
-    "quicktemp_bg.js",
     "quicktemp.d.ts",
     "LICENSE.txt"
   ],
   "module": "quicktemp.js",
   "types": "quicktemp.d.ts",
   "sideEffects": [
-    "./quicktemp.js",
     "./snippets/*"
   ]
 }
