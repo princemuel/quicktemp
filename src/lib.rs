@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 
 extern crate web_sys;
 
-// A macro to provide `println!(..)`-style syntax for `console.log` logging.
+// A macro target_scale provide `println!(..)`-style syntax for `console.log` logging.
 macro_rules! log {
     ( $( $t:tt )* ) => {
         web_sys::console::log_1(&format!( $( $t )* ).into());
@@ -15,107 +15,121 @@ macro_rules! log {
 #[wasm_bindgen]
 #[repr(u8)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Unit {
+pub enum Scale {
     Celsius,
     Fahrenheit,
     Kelvin,
 }
 
 #[wasm_bindgen]
-struct Temperature {
-    from: Unit,
-    to: Unit,
-    degree: f64,
-}
-impl Default for Temperature {
-    fn default() -> Self {
-        Self::new()
-    }
+#[derive(Debug)]
+pub struct Temperature {
+    source_scale: Scale,
+    target_scale: Scale,
+    value: f64,
+    is_valid: bool,
 }
 
 impl fmt::Display for Temperature {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let unit_from_str = match self.from {
-            Unit::Celsius => "Celsius",
-            Unit::Fahrenheit => "Fahrenheit",
-            Unit::Kelvin => "Kelvin",
+        let source = match self.source_scale {
+            Scale::Celsius => "Celsius",
+            Scale::Fahrenheit => "Fahrenheit",
+            Scale::Kelvin => "Kelvin",
         };
 
-        let unit_to_str = match self.to {
-            Unit::Celsius => "Celsius",
-            Unit::Fahrenheit => "Fahrenheit",
-            Unit::Kelvin => "Kelvin",
+        let target = match self.target_scale {
+            Scale::Celsius => "Celsius",
+            Scale::Fahrenheit => "Fahrenheit",
+            Scale::Kelvin => "Kelvin",
         };
 
-        write!(
-            f,
-            "Temperature: {:.2} {} -> {}",
-            self.degree, unit_from_str, unit_to_str
-        )
+        write!(f, "Temperature: {:.2} {} -> {}", self.value, source, target)
+    }
+}
+impl Default for Temperature {
+    fn default() -> Self {
+        Self::new()
+            .value(100.0)
+            .source_scale(Scale::Celsius)
+            .target_scale(Scale::Fahrenheit)
     }
 }
 
 #[wasm_bindgen]
 impl Temperature {
-    pub fn new() -> Temperature {
+    pub fn new() -> Self {
         utils::set_panic_hook();
 
-        let degree = 100.0;
-        let from_degree = Unit::Celsius;
-        let to_degree = Unit::Fahrenheit;
+        Self {
+            value: 100.0,
+            source_scale: Scale::Celsius,
+            target_scale: Scale::Fahrenheit,
+            is_valid: true,
+        }
+    }
 
-        Temperature { degree, from: from_degree, to: to_degree }
+    pub fn build(mut self) -> Result<Temperature, String> {
+        if self.value.is_nan() {
+            Err("Could not create temperature. Temperature must have:
+            1) A valid source scale type
+            2) A valid target scale type
+            3) A valid temparature degree value"
+                .to_string())
+        } else {
+            self.is_valid = true;
+            Ok(self)
+        }
     }
 
     pub fn convert(&self) -> f64 {
         log!(
-            "Converting temperature: degree={}, from={:?}, to={:?}",
-            self.degree,
-            self.from,
-            self.to
+            "Converting temperature: value={}, source_scale={:?}, target_scale={:?}",
+            self.value,
+            self.source_scale,
+            self.target_scale
         );
 
-        let converted = match (self.from, self.to) {
-            (Unit::Celsius, Unit::Fahrenheit) => self.degree * 9.0 / 5.0 + 32.0,
-            (Unit::Fahrenheit, Unit::Celsius) => {
-                (self.degree - 32.0) * 5.0 / 9.0
+        let converted = match (self.source_scale, self.target_scale) {
+            (Scale::Celsius, Scale::Fahrenheit) => {
+                self.value * 9.0 / 5.0 + 32.0
             },
-            (Unit::Celsius, Unit::Kelvin) => self.degree + 273.15,
-            (Unit::Kelvin, Unit::Celsius) => self.degree - 273.15,
-            (Unit::Fahrenheit, Unit::Kelvin) => {
-                (self.degree - 32.0) * 5.0 / 9.0 + 273.15
+            (Scale::Fahrenheit, Scale::Celsius) => {
+                (self.value - 32.0) * 5.0 / 9.0
             },
-            (Unit::Kelvin, Unit::Fahrenheit) => {
-                (self.degree - 273.15) * 9.0 / 5.0 + 32.0
+            (Scale::Celsius, Scale::Kelvin) => self.value + 273.15,
+            (Scale::Kelvin, Scale::Celsius) => self.value - 273.15,
+            (Scale::Fahrenheit, Scale::Kelvin) => {
+                (self.value - 32.0) * 5.0 / 9.0 + 273.15
             },
-            _ => self.degree, // No conversion needed if units are the same
+            (Scale::Kelvin, Scale::Fahrenheit) => {
+                (self.value - 273.15) * 9.0 / 5.0 + 32.0
+            },
+            _ => self.value, // No conversion needed if scales are the same
         };
 
         let multiplier = 10_i8.pow(2) as f64;
         (converted * multiplier).round() / multiplier
     }
 
-    pub fn get_degree(&self) -> f64 {
-        self.degree
-    }
-    /// Set the temparature's degree
-    pub fn set_degree(&mut self, degree: f64) {
-        self.degree = degree
-    }
-
-    pub fn get_from_unit(&self) -> Unit {
-        self.from
-    }
-    /// Set the temparature's from unit
-    pub fn set_from_unit(&mut self, unit: Unit) {
-        self.from = unit
+    /// Set the temparature's value
+    pub fn value(mut self, value: f64) -> Self {
+        self.value = value;
+        self.is_valid = false;
+        self
     }
 
-    pub fn get_to_unit(&self) -> Unit {
-        self.to
+    /// Set the temparature's source scale
+    pub fn source_scale(mut self, value: Scale) -> Self {
+        self.source_scale = value;
+        self.is_valid = false;
+        self
     }
-    /// Set the temparature's to unit
-    pub fn set_to_unit(&mut self, unit: Unit) {
-        self.to = unit
+
+    /// Set the temparature's target scale
+    pub fn target_scale(mut self, value: Scale) -> Self {
+        self.target_scale = value;
+        self.is_valid = false;
+        self
     }
 }
