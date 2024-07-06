@@ -53,6 +53,15 @@ function addHeapObject(obj) {
     return idx;
 }
 
+let cachedInt32Memory0 = null;
+
+function getInt32Memory0() {
+    if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
+        cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
+    }
+    return cachedInt32Memory0;
+}
+
 let WASM_VECTOR_LEN = 0;
 
 const lTextEncoder = typeof TextEncoder === 'undefined' ? (0, module.require)('util').TextEncoder : TextEncoder;
@@ -110,18 +119,9 @@ function passStringToWasm0(arg, malloc, realloc) {
     WASM_VECTOR_LEN = offset;
     return ptr;
 }
-
-let cachedInt32Memory0 = null;
-
-function getInt32Memory0() {
-    if (cachedInt32Memory0 === null || cachedInt32Memory0.byteLength === 0) {
-        cachedInt32Memory0 = new Int32Array(wasm.memory.buffer);
-    }
-    return cachedInt32Memory0;
-}
 /**
 */
-export const Unit = Object.freeze({ Celsius:0,"0":"Celsius",Fahrenheit:1,"1":"Fahrenheit",Kelvin:2,"2":"Kelvin", });
+export const Scale = Object.freeze({ Celsius:0,"0":"Celsius",Fahrenheit:1,"1":"Fahrenheit",Kelvin:2,"2":"Kelvin", });
 
 const TemperatureFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
@@ -157,6 +157,25 @@ export class Temperature {
         return Temperature.__wrap(ret);
     }
     /**
+    * @returns {Temperature}
+    */
+    build() {
+        try {
+            const ptr = this.__destroy_into_raw();
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.temperature_build(retptr, ptr);
+            var r0 = getInt32Memory0()[retptr / 4 + 0];
+            var r1 = getInt32Memory0()[retptr / 4 + 1];
+            var r2 = getInt32Memory0()[retptr / 4 + 2];
+            if (r2) {
+                throw takeObject(r1);
+            }
+            return Temperature.__wrap(r0);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
     * @returns {number}
     */
     convert() {
@@ -164,46 +183,34 @@ export class Temperature {
         return ret;
     }
     /**
-    * @returns {number}
+    * Set the temparature's value
+    * @param {number} value
+    * @returns {Temperature}
     */
-    get_degree() {
-        const ret = wasm.temperature_get_degree(this.__wbg_ptr);
-        return ret;
+    value(value) {
+        const ptr = this.__destroy_into_raw();
+        const ret = wasm.temperature_value(ptr, value);
+        return Temperature.__wrap(ret);
     }
     /**
-    * Set the temparature's degree
-    * @param {number} degree
+    * Set the temparature's source scale
+    * @param {Scale} value
+    * @returns {Temperature}
     */
-    set_degree(degree) {
-        wasm.temperature_set_degree(this.__wbg_ptr, degree);
+    source_scale(value) {
+        const ptr = this.__destroy_into_raw();
+        const ret = wasm.temperature_source_scale(ptr, value);
+        return Temperature.__wrap(ret);
     }
     /**
-    * @returns {Unit}
+    * Set the temparature's target scale
+    * @param {Scale} value
+    * @returns {Temperature}
     */
-    get_from_unit() {
-        const ret = wasm.temperature_get_from_unit(this.__wbg_ptr);
-        return ret;
-    }
-    /**
-    * Set the temparature's from unit
-    * @param {Unit} unit
-    */
-    set_from_unit(unit) {
-        wasm.temperature_set_from_unit(this.__wbg_ptr, unit);
-    }
-    /**
-    * @returns {Unit}
-    */
-    get_to_unit() {
-        const ret = wasm.temperature_get_to_unit(this.__wbg_ptr);
-        return ret;
-    }
-    /**
-    * Set the temparature's to unit
-    * @param {Unit} unit
-    */
-    set_to_unit(unit) {
-        wasm.temperature_set_to_unit(this.__wbg_ptr, unit);
+    target_scale(value) {
+        const ptr = this.__destroy_into_raw();
+        const ret = wasm.temperature_target_scale(ptr, value);
+        return Temperature.__wrap(ret);
     }
 }
 
