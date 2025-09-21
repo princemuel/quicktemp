@@ -7,7 +7,7 @@ const output = $("#result", HTMLOutputElement);
 
 type FormDataValues = { source: string; target: string; value: string };
 
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const { value, source, target } = Object.fromEntries(new FormData(form).entries()) as FormDataValues;

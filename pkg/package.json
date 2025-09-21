@@ -14,12 +14,14 @@
   "files": [
     "index_bg.wasm",
     "index.js",
+    "index_bg.js",
     "index.d.ts",
     "LICENSE.txt"
   ],
   "main": "index.js",
   "types": "index.d.ts",
   "sideEffects": [
+    "./index.js",
     "./snippets/*"
   ]
 }

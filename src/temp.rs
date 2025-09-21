@@ -29,7 +29,7 @@ impl Temp {
         };
 
         if result.is_finite() {
-            Ok(result)
+            Ok((result * 100.0).round() / 100.0) // round to 2 decimals
         } else {
             Err(TemperatureError::Overflow)
         }
