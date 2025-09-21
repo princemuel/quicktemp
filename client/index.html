@@ -19,77 +19,85 @@
       }
     </style>
   </head>
+  <body
+    class="min-h-svh font-sans bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 antialiased"
+  >
+    <main
+      class="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 w-full max-w-md shadow-2xl"
+    >
+      <section class="flex flex-col gap-6">
+        <div class="text-center flex items-center flex-col gap-2">
+          <h1 class="text-2xl md:text-3xl font-bold text-white uppercase">🌡️Temp.conv</h1>
+          <p class="text-slate-300 text-sm">Precision temperature conversion</p>
+        </div>
 
-  <body class="antialiased font-sans text-slate-200 font-medium bg-slate-900">
-    <div class="flex items-center min-h-svh w-full px-6">
-      <main class="max-w-md w-full mx-auto px-4 py-8 md:px-6 bg-slate-800 rounded-lg">
         <form class="flex flex-col gap-6">
-          <h1 class="text-2xl self-center lg:text-3xl font-bold text-white">Quick Temp 🌡️</h1>
+          <div class="grid grid-cols-2 gap-4">
+            <fieldset class="flex flex-col gap-2">
+              <legend class="sr-only">Use the Select Menus to select a temp</legend>
+              <label for="source" class="text-sm font-medium text-slate-200">From</label>
+              <select
+                name="source"
+                id="source"
+                class="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-600 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700/50"
+                autocomplete="off"
+                required
+              >
+                <option value="c">Celsius (°C)</option>
+                <option value="f">Fahrenheit (°F)</option>
+                <option value="k">Kelvin (K)</option>
+                <option value="r">Rankine (°R)</option>
+                <option value="re">Réaumur (°Re)</option>
+              </select>
+            </fieldset>
 
-          <p class="text-sm text-center">
-            Seamlessly convert to and from Celsius, Fahrenheit, Rankine, Réaumur and Kelvin with precision
-            and convenience.
-          </p>
+            <div class="flex flex-col gap-2">
+              <label for="target" class="text-sm font-medium text-slate-200">To</label>
+              <select
+                name="target"
+                id="target"
+                class="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-600 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700/50"
+                autocomplete="off"
+                required
+              >
+                <option value="f">Fahrenheit (°F)</option>
+                <option value="c">Celsius (°C)</option>
+                <option value="k">Kelvin (K)</option>
+                <option value="r">Rankine (°R)</option>
+                <option value="re">Réaumur (°R)</option>
+              </select>
+            </div>
+          </div>
 
-          <fieldset class="grid gap-6 items-center px-2 py-4 grid-cols-[5ch,auto]">
-            <legend class="sr-only">Use the Select Menus to</legend>
-
-            <label for="source" class="text-lg cursor-pointer">From</label>
-            <select
-              name="source"
-              id="source"
-              class="px-3 py-2 rounded-md text-gray-900 w-full"
-              autocomplete="off"
-              required
-            >
-              <option value="c" selected>Celsius</option>
-              <option value="f">Fahrenheit</option>
-              <option value="k">Kelvin</option>
-              <option value="r">Rankine</option>
-              <option value="re">Réaumur</option>
-            </select>
-
-            <label for="target" class="text-lg cursor-pointer">To</label>
-            <select
-              name="target"
-              id="target"
-              class="px-3 py-2 rounded-md text-gray-900 w-full"
-              autocomplete="off"
-              required
-            >
-              <option value="c">Celsius</option>
-              <option value="f">Fahrenheit</option>
-              <option value="k">Kelvin</option>
-              <option value="r">Rankine</option>
-              <option value="re">Réaumur</option>
-            </select>
-
-            <label for="value" class="text-lg cursor-pointer"> Unit </label>
+          <div class="flex flex-col gap-2">
+            <label for="value" class="text-sm font-medium text-slate-200">Temperature Value</label>
             <input
               type="number"
               id="value"
               name="value"
-              placeholder="Enter the temperature..."
-              class="px-2.5 py-2 rounded-md text-gray-900 w-full"
+              placeholder="Enter temperature..."
+              class="w-full px-4 py-3 rounded-lg bg-slate-800/50 border border-slate-600 text-white placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-slate-700/50"
               step="0.01"
               required
             />
-
-            <p class="text-lg cursor-pointer">Result:</p>
-            <div class="flex items-center justify-center py-3 px-2">
-              <output name="result" id="result" for="source target value" class="text-white"></output>
-            </div>
-          </fieldset>
+          </div>
 
           <button
             type="submit"
-            class="inline-flex mx-auto rounded-full bg-slate-900 px-5 py-2 items-center text-white cursor-pointer"
+            class="w-full py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 active:scale-95"
           >
             Convert
           </button>
         </form>
-      </main>
-    </div>
+
+        <output
+          id="result"
+          class="p-4 rounded-lg bg-slate-800/30 border border-slate-600 text-center text-slate-300 min-h-12 flex items-center justify-center"
+        >
+          <span class="text-slate-500">Enter values and convert...</span>
+        </output>
+      </section>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
