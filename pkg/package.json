@@ -1,10 +1,11 @@
 {
   "name": "quicktemp",
+  "type": "module",
   "collaborators": [
     "Prince Muel <vansomecsam@gmail.com>"
   ],
   "description": "A temparature converter built with Vite, Wasm and Rust",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,10 +15,9 @@
     "quicktemp_bg.wasm",
     "quicktemp.js",
     "quicktemp_bg.js",
-    "quicktemp.d.ts",
-    "LICENSE.txt"
+    "quicktemp.d.ts"
   ],
-  "module": "quicktemp.js",
+  "main": "quicktemp.js",
   "types": "quicktemp.d.ts",
   "sideEffects": [
     "./quicktemp.js",

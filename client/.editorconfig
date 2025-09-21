@@ -1,8 +1,5 @@
 # EditorConfig is awesome: https://EditorConfig.org
 
-# Top-most EditorConfig file
-root = true
-
 # Default settings for all files
 [*]
 charset = utf-8

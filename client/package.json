@@ -1,5 +1,5 @@
 {
-  "name": "cliemt",
+  "name": "client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,16 +9,16 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.39",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.5.3",
-    "vite": "^5.3.3",
-    "vite-plugin-top-level-await": "^1.4.1",
-    "vite-plugin-wasm": "^3.3.0"
+    "autoprefixer": "^10",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "typescript": "^5",
+    "vite": "^5",
+    "vite-plugin-top-level-await": "^1",
+    "vite-plugin-wasm": "^3"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.3.1",
+    "@vercel/analytics": "^1",
     "quicktemp": "file:../pkg"
   }
 }
