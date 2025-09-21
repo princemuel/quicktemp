@@ -1,28 +1,25 @@
-use serde_wasm_bindgen::to_value;
-use wasm_bindgen::prelude::*;
+use wasm_bindgen::{JsValue, prelude::wasm_bindgen};
 
 use crate::error::TemperatureError;
-use crate::temp::TemperatureBuilder;
+use crate::temp::Temp;
 use crate::unit::TemperatureUnit;
 
 #[wasm_bindgen]
 pub fn convert(value: &str, unit: &str, target: &str) -> Result<f64, JsValue> {
-    // Parse numeric input
+    // Parse number
     let value: f64 = value
         .trim()
-        .parse()
-        .map_err(|_| to_value(&TemperatureError::InvalidNumber).unwrap())?;
+        .parse::<f64>()
+        .map_err(|_| JsValue::from(TemperatureError::InvalidNumber))?;
 
     // Parse units
-    let unit = TemperatureUnit::try_from(unit).map_err(|e| to_value(&e).unwrap())?;
-    let target = TemperatureUnit::try_from(target).map_err(|e| to_value(&e).unwrap())?;
+    let unit = TemperatureUnit::try_from(unit).map_err(JsValue::from)?;
+    let target = TemperatureUnit::try_from(target).map_err(JsValue::from)?;
 
-    let temp = TemperatureBuilder::new()
-        .value(value)
-        .unit(unit)
-        .build()
-        .map_err(|e| to_value(&e).unwrap())?;
+    // Validate and convert
+    if value < unit.min() {
+        return Err(JsValue::from(TemperatureError::BelowAbsoluteZero));
+    }
 
-    // Convert and return
-    temp.convert(target).map_err(|e| to_value(&e).unwrap())
+    Temp::new(value, unit).convert(target).map_err(JsValue::from)
 }

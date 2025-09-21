@@ -1,6 +1,6 @@
 use crate::error::TemperatureError;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy)]
 pub enum TemperatureUnit {
     Celsius,
     Fahrenheit,
@@ -8,6 +8,7 @@ pub enum TemperatureUnit {
     Rankin,
     Reaumur,
 }
+
 impl TemperatureUnit {
     pub const fn min(self) -> f64 {
         match self {
@@ -18,32 +19,26 @@ impl TemperatureUnit {
             Self::Reaumur => -218.52,
         }
     }
-
-    pub const fn as_str(self) -> &'static str {
-        match self {
-            Self::Celsius => "C",
-            Self::Fahrenheit => "F",
-            Self::Kelvin => "K",
-            Self::Rankin => "R",
-            Self::Reaumur => "Re",
-        }
-    }
 }
 impl TryFrom<&str> for TemperatureUnit {
     type Error = TemperatureError;
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value.trim().to_lowercase().as_str() {
-            "c" => Ok(Self::Celsius),
-            "f" => Ok(Self::Fahrenheit),
-            "k" => Ok(Self::Kelvin),
-            "r" => Ok(Self::Rankin),
-            "re" => Ok(Self::Reaumur),
-            "" => Err(TemperatureError::MissingUnit),
-            _ => Err(TemperatureError::UnknownUnit),
+    fn try_from(v: &str) -> Result<Self, Self::Error> {
+        let v = v.trim();
+        if v.eq_ignore_ascii_case("c") {
+            Ok(Self::Celsius)
+        } else if v.eq_ignore_ascii_case("f") {
+            Ok(Self::Fahrenheit)
+        } else if v.eq_ignore_ascii_case("k") {
+            Ok(Self::Kelvin)
+        } else if v.eq_ignore_ascii_case("r") {
+            Ok(Self::Rankin)
+        } else if v.eq_ignore_ascii_case("re") {
+            Ok(Self::Reaumur)
+        } else if v.is_empty() {
+            Err(TemperatureError::MissingUnit)
+        } else {
+            Err(TemperatureError::UnknownUnit)
         }
     }
-}
-impl From<TemperatureUnit> for &str {
-    fn from(value: TemperatureUnit) -> Self { value.as_str() }
 }
