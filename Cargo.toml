@@ -1,27 +1,24 @@
 [package]
   name = "quicktemp"
-  version = "0.2.0"
+  version = "0.3.0"
   authors = ["Prince Muel <vansomecsam@gmail.com>"]
-  edition = "2021"
+  edition = "2024"
   description = "A temparature converter built with Vite, Wasm and Rust"
   repository = "https://github.com/princemuel/quicktemp"
   license = "MIT"
   publish = false
 
 [lib]
-  crate-type = ["cdylib", "rlib"]
+  crate-type = ["cdylib"]
 
 [dependencies]
-  serde = { version = "1", features = ["derive"] }
-  serde-wasm-bindgen = "0.6"
-  wasm-bindgen = "0.2"
-
-[dev-dependencies]
-  wasm-bindgen-test = "0.3"
+  wasm-bindgen = { version = "0.2", default-features = false, features = [
+    "std",
+  ] }
 
 [profile.release]
-  opt-level = "s"   # or "s" if you want better perf, slightly larger
-  lto = true        # enable link-time optimization
+  opt-level = "z"   # or "s" if you want better perf, slightly larger
+  lto = "fat"       # enable link-time optimization
   codegen-units = 1 # better optimization, slower build
   panic = "abort"   # strip unwinding code
   strip = true      # remove symbols
