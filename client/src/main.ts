@@ -3,7 +3,5 @@
 // that no one else needs to worry about it again.
 import { inject } from "@vercel/analytics";
 import "./assets/global.css";
-import("./scripts/index.ts").catch((e) =>
-  console.error("Error importing `index.ts`:", e)
-);
+import("./scripts/index.ts").catch((e) => console.error("Error importing `index.ts`:", e));
 inject();
