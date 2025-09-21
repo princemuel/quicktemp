@@ -1,5 +1,6 @@
 {
   "name": "quicktemp",
+  "type": "module",
   "collaborators": [
     "Prince Muel <vansomecsam@gmail.com>"
   ],
@@ -17,7 +18,7 @@
     "quicktemp.d.ts",
     "LICENSE.txt"
   ],
-  "module": "quicktemp.js",
+  "main": "quicktemp.js",
   "types": "quicktemp.d.ts",
   "sideEffects": [
     "./quicktemp.js",
