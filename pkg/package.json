@@ -15,7 +15,8 @@
     "quicktemp_bg.wasm",
     "quicktemp.js",
     "quicktemp_bg.js",
-    "quicktemp.d.ts"
+    "quicktemp.d.ts",
+    "LICENSE.txt"
   ],
   "main": "quicktemp.js",
   "types": "quicktemp.d.ts",
