@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "tsc && vite build",
+    "build:wasm": "wasm-pack build && npm install",
+    "build": "npm run build:wasm && tsc && vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
