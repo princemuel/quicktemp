@@ -22,6 +22,8 @@ impl core::fmt::Display for TemperatureError {
     }
 }
 
+impl core::error::Error for TemperatureError {}
+
 impl From<TemperatureError> for JsValue {
     fn from(err: TemperatureError) -> JsValue {
         JsError::new(&err.to_string()).into()
