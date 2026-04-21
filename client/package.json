@@ -3,22 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
   "scripts": {
     "dev": "vite --host",
-    "build:wasm": "wasm-pack build && pnpm install",
-    "build": "tsc && vite build",
+    "build": "tsc -b && vite build",
+    "build-wasm": "./scripts/build.sh",
+    "trace-wasm": "./scripts/trace.sh",
     "preview": "vite preview"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.17",
-    "tailwindcss": "^4.1.17",
-    "typescript": "^5.9.3",
-    "vite": "^6.4.1",
-    "vite-plugin-wasm": "^3.5.0"
-  },
-  "dependencies": {
-    "@vercel/analytics": "^1.5.0",
-    "quicktemp": "file:../pkg"
-  },
-  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
+    "@tailwindcss/vite": "^4.2.3",
+    "tailwindcss": "^4.2.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.9"
+  }
 }
