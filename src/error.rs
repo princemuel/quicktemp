@@ -1,31 +1,19 @@
-use wasm_bindgen::{JsError, JsValue};
+use wasm_bindgen::JsError;
 
-#[derive(Debug)]
-pub enum TemperatureError {
+#[derive(Debug, thiserror::Error)]
+pub enum TempError {
+    #[error("invalid temperature. value below absolute zero")]
     BelowAbsoluteZero,
-    InvalidNumber,
+    #[error("invalid temperature. value is not a number")]
+    InvalidNumber(#[from] core::num::ParseFloatError),
+    #[error("temperature unit is missing")]
     MissingUnit,
+    #[error("invalid temperature. value is overflowed")]
     Overflow,
+    #[error("invalid temperature. unknown temperature unit")]
     UnknownUnit,
 }
 
-impl core::fmt::Display for TemperatureError {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        let msg = match self {
-            Self::BelowAbsoluteZero => "Temperature below absolute zero is invalid",
-            Self::InvalidNumber => "Invalid number",
-            Self::MissingUnit => "Unit missing",
-            Self::Overflow => "Number overflow",
-            Self::UnknownUnit => "Unknown unit",
-        };
-        f.write_str(msg)
-    }
-}
-
-impl core::error::Error for TemperatureError {}
-
-impl From<TemperatureError> for JsValue {
-    fn from(err: TemperatureError) -> JsValue {
-        JsError::new(&err.to_string()).into()
-    }
+impl From<TempError> for wasm_bindgen::JsValue {
+    fn from(e: TempError) -> Self { JsError::new(e.to_string().as_str()).into() }
 }

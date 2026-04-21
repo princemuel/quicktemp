@@ -1,6 +1,3 @@
-mod convert;
-mod error;
-mod temp;
-mod unit;
-
-pub use convert::convert;
+pub mod error;
+pub mod temp;
+pub mod unit;
