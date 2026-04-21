@@ -1,4 +1,4 @@
-# Temp.conv🌡️
+# Quicktemp🌡️
 
 The ultimate tool for effortless temperature conversions with a user-friendly interface,
 ensuring precision and convenience for all your temperature-related needs.
